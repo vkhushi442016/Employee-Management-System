@@ -1,22 +1,27 @@
+require('dotenv').config()
+
 const { MongoClient } = require('mongodb');
 
-const client = new MongoClient(process.env.MONGO_URI);
+const uri = process.env.MONGO_URI;
+console.log(uri);
+
+const client = new MongoClient(uri);
 
 let db;
 
 async function connectDB() {
-
     await client.connect();
 
-    db = client.db('auth_db');
+    db = client.db('employee_management');
 
-    console.log('Auth DB Connected');
+    console.log('MongoDB Connected');
 }
 
 function getDB() {
     return db;
 }
 
+connectDB()
 module.exports = {
     connectDB,
     getDB

@@ -1,6 +1,8 @@
 const { ObjectId } = require('mongodb');
 const { getDB } = require('../db/db');
-const { getChannel } = require('../../../shared/rabbitmq')
+//const { getChannel } = require('../../../shared/rabbitmq')
+
+const { getChannel } = require('../shared/rabbitmq');
 
 async function createEmployee(req, res) {
     try {

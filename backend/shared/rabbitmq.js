@@ -3,32 +3,30 @@ const amqp = require('amqplib');
 let channel;
 
 async function connectRabbitMQ() {
+    const url = process.env.RABBITMQ_URL;
 
-    try {
+    while (true) {
+        try {
+            const connection = await amqp.connect(url);
+            channel = await connection.createChannel();
 
-        const connection = await amqp.connect({
-            protocol: 'amqp',
-            hostname: 'localhost',
-            port: 5672,
-            username: 'admin',
-            password: 'admin123',
-        }) 
+            console.log('✅ RabbitMQ Connected');
 
-        channel =
-            await connection.createChannel();
+            break; // exit loop once connected
 
-        console.log(
-            'RabbitMQ Connected'
-        );
+        } catch (error) {
+            console.log('⏳ RabbitMQ not ready, retrying in 3s...');
+            console.log(error.message);
 
-    } catch (error) {
-
-        console.log(error);
+            await new Promise(res => setTimeout(res, 3000));
+        }
     }
 }
 
 function getChannel() {
-
+    if (!channel) {
+        throw new Error('RabbitMQ channel not initialized yet');
+    }
     return channel;
 }
 

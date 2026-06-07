@@ -6,13 +6,9 @@ const { sendWelcomeEmail } = require('../services/mailService');
 async function consumeEmployeeEvents() {
 
     try {
-        const connection = await amqp.connect({
-            protocol: 'amqp',
-            hostname: 'localhost',
-            port: 5672,
-            username: 'admin',
-            password: 'admin123',
-        })
+        const connection = await amqp.connect(
+            process.env.RABBITMQ_URL
+        );
 
         const channel = await connection.createChannel();
 

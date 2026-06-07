@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
-
 const { connectDB } = require('./db/connect');
 
 const app = express();
@@ -14,8 +13,22 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 
-connectDB();
+const PORT = process.env.PORT || 5001;
 
-app.listen(process.env.PORT, () => {
-    console.log(`Auth Service Running on ${process.env.PORT}`);
-});
+async function startServer() {
+    try {
+        console.log("Mongo URI:", process.env.MONGO_URI);
+
+        await connectDB(); // ✅ WAIT for DB connection
+
+        app.listen(PORT, () => {
+            console.log(`Auth Service Running on ${PORT}`);
+        });
+
+    } catch (error) {
+        console.error("Failed to start Auth Service:", error);
+        process.exit(1);
+    }
+}
+
+startServer();

@@ -1,0 +1,72 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_LOOPBACK_USERS: "none"
+    networks:
+      - employee-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    env_file:
+      - services/auth-service/.env
+    depends_on:
+      - rabbitmq
+    networks:
+      - employee-network
+
+  employee-service:
+    build:
+      context: .
+      dockerfile: services/employee-service/Dockerfile
+    container_name: employee-service
+    ports:
+      - "5002:5002"
+    env_file:
+      - services/employee-service/.env
+    depends_on:
+      - rabbitmq
+      - auth-service
+    networks:
+      - employee-network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    container_name: notification-service
+    env_file:
+      - services/notification-service/.env
+    depends_on:
+      - rabbitmq
+    networks:
+      - employee-network
+
+  api-gateway:
+    build:
+      context: ../apiGateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - auth-service
+      - employee-service
+    networks:
+      - employee-network
+
+networks:
+  employee-network:
+    driver: bridge
