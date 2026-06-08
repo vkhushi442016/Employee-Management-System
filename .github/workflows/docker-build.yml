@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend/**'
+      - 'apiGateway/**'
+      - 'docker-compose.prod.yml'
 
 jobs:
   build-and-push:
