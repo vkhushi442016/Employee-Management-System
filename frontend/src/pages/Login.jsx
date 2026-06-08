@@ -19,7 +19,6 @@ function Login() {
         e.preventDefault();
 
         try {
-            //http://localhost:5000/api/auth/login
             const res = await API.post(
                 '/auth/login',
                 formData

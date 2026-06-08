@@ -12,8 +12,9 @@ const Employees = () => {
     async function fetchEmployees() {
 
         try {
+            const res = await API.get('/employees/get/emp')
             //http://localhost:5000/api/employees/get/emp
-            const res = await axios.get('http://localhost:5000/api/employees/get/emp');
+           // const res = await axios.get('http://localhost:5000/api/employees/get/emp');
 
             setEmployees(res.data);
 
@@ -63,7 +64,8 @@ const Employees = () => {
     return (
         <div>
             <Navbar />
-             <h1>Employee Management</h1>
+             <h1 className='bg-red-300'>Employee Management</h1>
+             <h3>Created by Khushi</h3>
             <EmployeeForm
                 onAddEmployee={addEmployee}
             />
