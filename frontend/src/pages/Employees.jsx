@@ -67,6 +67,7 @@ const Employees = () => {
              <h1 className='bg-red-300'>Employee Management</h1>
              <h3>Created by Khushi</h3>
              <h2>Yes the changes are reflecting</h2>
+             <p>Let's fix some more issues and learn more....</p>
             <EmployeeForm
                 onAddEmployee={addEmployee}
             />
